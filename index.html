@@ -11,22 +11,69 @@
     
 </head>
 <body>
-    <div id="notification"></div>
     
-    <form action="" class="col-12 col-sm-4 mx-auto border p-5 mt-5 border-dark shadow">
-        <input type="text" id="username" name="username" placeholder="Enter username" class="form-control"> <br>
-        <input type="text" id="email" name="email" placeholder="Enter email" class="form-control"> <br>
-        <input type="password" id="password" name="password" placeholder="Enter password" class="form-control"><br>
-        <div class="btn-group">
-            <button type="button" onclick="submitRegistrationForm()" class="btn btn-success">Register</button>
-            <button type="button" onclick="logOut(), location.reload()" class="btn btn-danger">Logout</button>
-            <button type="button" onclick="login()" class=" btn btn-primary">Login</button>
+
+
+<div class="row">
+    
+    <div class="col-12 col-sm-6 container bg-secondary">
+        <div class="row">
+          <div class="col-sm-12 col-md-10 col-lg-9 mx-auto">
+            <div class="card border-0 shadow rounded-3 mt-5">
+              <div class="card-body p-4 p-sm-5">
+                <h5 class="card-title text-center mb-5 fw-light fs-5">Sign In</h5>
+
+                <form action="">
+
+                    <div class="form-group">
+                        <label for="username"  class="form-label">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter username" class="form-control">
+                    </div>
+            
+                    <div class="form-group"  class="register-hide">
+                        <label for="email" style="display: none;" class="form-label register-hide">Email</label>
+                        <input type="text" style="display: none;" id="email" name="email" placeholder="Enter email" class="register-hide form-control">
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter password" class="form-control">
+                    </div>
+            
+                    <a href="#" onclick="showRegister()">Register</a> <br>
+                    <div class="btn-group py-3">
+                        <button id="logoutBtn" type="button" style="display: none;" onclick="logOut(), location.reload()" class="btn btn-danger">Logout</button>
+
+                        <button type="button" onclick="submitRegistrationForm()"
+                                class="btn btn-success register-hide" style="display: none;">
+                            Register
+                        </button>
+
+                    </div>
+                    <div class="btn-group py-3 float-end">
+                        <button type="button" onclick="login()" class=" btn btn-primary" id="loginBtn">Login</button>
+                    </div>
+                </form>
+
+
+              </div>
+            </div>
+          </div>
         </div>
-    </form>
+    </div>
+
+    <div class="col-12 col-sm-6 ">
+        <div id="notification"></div>
+        <button onclick="getProtectedRoute()"  class=" btn btn-outline-dark mt-1" style="width:90%">Get Protected Resource</button>
+
+        <div class="card border-0 shadow rounded-3 my-3 p-3" id="root" style="height:78vh;width:90%"></div>
+    </div>
 
 
-    <div class="container-fluid" id="root" style="height:40vh;width:100%"></div>
-    <button onclick="getProtectedRoute()">Get protected route</button>
+
+</div>
+
+    
     <script src="main.js"></script>
 </body>
 </html>

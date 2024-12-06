@@ -1,47 +1,3 @@
-function submitRegistrationForm(){
-
-    handleSubmitRegistrationForm()
-}
-
-async function handleSubmitRegistrationForm() {
-    let url = `http://localhost:3000/register`;
-    let user = {
-        'username' : document.getElementById('username').value,
-        'password' : document.getElementById('password').value,
-        'email' : document.getElementById('email').value,
-    }
-    console.log(user)
-    var xhr = $.post(url, user, function(){
-        console.log('connected')
-    })
-
-    xhr.then(function(data){
-        console.log(data)
-    })
-}
-
-async function login() {
-    let url = `http://localhost:3000/login`;
-    let user = {
-        'username' : document.getElementById('username').value,
-        'password' : document.getElementById('password').value,
-        'email' : document.getElementById('email').value,
-    }
-    console.log(user)
-    var xhr = $.post(url, user, function(){
-        console.log('connected')
-    })
-
-    xhr.then(function(data){
-        console.log((data))
-        setCookie('token', data.token, 1);
-        setCookie('username', data.username, 1);
-        
-    })
-}
-
-
-
 function getCookie(cname) {
     let name = cname + "=";
     let ca = document.cookie.split(';');
@@ -69,8 +25,70 @@ function setCookie(cname, cvalue, exdays) {
     let expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+function submitRegistrationForm(){
+
+    handleSubmitRegistrationForm()
+}
+
+async function handleSubmitRegistrationForm() {
+    let url = `http://localhost:3000/register`;
+    if (document.getElementById('username').value == '' 
+        || document.getElementById('password').value == '' ) {
+            alert('Oops. Please enter values'); return;
+    }
+    let user = {
+        'username' : document.getElementById('username').value,
+        'password' : document.getElementById('password').value,
+        'email' : document.getElementById('email').value,
+    }
+
+    var xhr = $.post(url, user, function(){
+        console.log('connected')
+    })
+
+    xhr.then(function(data){
+        console.log(data);
+        document.getElementById('username').value = ''
+        document.getElementById('password').value = ''
+        document.getElementById('email').value = ''
+        document.getElementById('notification').innerHTML = data.message
+    })
+}
+
+async function login() {
+    let url = `http://localhost:3000/login`;
+    let user = {
+        'username' : document.getElementById('username').value,
+        'password' : document.getElementById('password').value,
+        'email' : document.getElementById('email').value,
+    }
+
+    var xhr = $.post(url, user, function(){
+        console.log('connected')
+    })
+
+    xhr.then(function(data){
+        console.log(data)
+        setCookie('token', data.token, 1);
+        setCookie('username', data.username, 1);
+        setCookie('userid', data.id, 1);
+        document.getElementById('root').innerHTML = `<h4>Welcome ${data.username}</h4>`;
+        let btn = document.getElementById('logoutBtn')
+        btn.style.display = 'block'
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+
+    })
+    xhr.fail(function(data){
+        document.getElementById('root').innerHTML 
+            = `<span class="alert alert-danger">Invalid Credentials  ${data.status}</span>`
+    })
+}
+
 let lgUsername = null;
 let token = null;
+let userid = null;
 
 function initAppLogin(){
     if (checkCookie('username')) { 
@@ -78,6 +96,9 @@ function initAppLogin(){
     }
     if (checkCookie('token')) { 
         token = checkCookie('token') 
+    }
+    if (checkCookie('userid')) { 
+        userid = checkCookie('userid') 
     }
 }
 function logOut(){
@@ -95,8 +116,8 @@ async function getProtectedRoute() {
     }); 
 
     xhr.then(function(data){
-        console.log(data)
-        document.getElementById('root').innerHTML += `<h4>Welcome ${getCookie('username')}</h4>`;
+
+        document.getElementById('root').innerHTML = `<h4>Welcome ${getCookie('username')}</h4>`;
         document.getElementById('root').innerHTML += data;
         
     })
@@ -107,5 +128,21 @@ async function getProtectedRoute() {
 }
 
 if (getCookie('username')) {
-    document.getElementById('notification').innerHTML = `<h5>Welcome ${getCookie('username')}</h5>`
+    document.getElementById('root').innerHTML = `<h4>Welcome ${getCookie('username')}</h4>`;
+    let btn = document.getElementById('logoutBtn')
+    btn.style.display = 'block'
+}
+
+
+
+function showRegister(){
+
+    let hiddenElem = document.querySelectorAll('.register-hide');
+    hiddenElem.forEach((el) => {
+        el.style.display = 'block'
+    })
+    logOut()
+    document.getElementById('root').innerHTML = '';
+    let logBtn = document.getElementById('loginBtn')
+        logBtn.style.display = 'none'
 }
